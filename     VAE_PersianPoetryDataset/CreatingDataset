@@ -1,0 +1,69 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/AliTavakoli2001/Accounting/blob/main/%20%20%20%20VAE_PersianPoetryDataset/CreatingDataset\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "import random\n",
+        "\n",
+        "# مسیر فایل‌های ورودی (کل شعرها)\n",
+        "INPUT_DIR = \"PersianPoetryDataset/full\"\n",
+        "# مسیر فایل‌های خروجی (نرم شده برای ترین)\n",
+        "OUTPUT_DIR = \"PersianPoetryDataset/train\"\n",
+        "\n",
+        "# نسبت انتخاب شعر (مثلاً 0.5 یعنی 50٪)\n",
+        "SPLIT_RATIO = 0.5\n",
+        "\n",
+        "# لیست شاعران\n",
+        "poets = [\"hafez\", \"moulavi\", \"saadi\", \"ferdousi\"]\n",
+        "\n",
+        "for poet in poets:\n",
+        "    input_path = os.path.join(INPUT_DIR, f\"{poet}_norm.txt\")\n",
+        "    output_path = os.path.join(OUTPUT_DIR, f\"{poet}.txt\")\n",
+        "\n",
+        "    with open(input_path, encoding=\"utf-8\") as f:\n",
+        "        lines = [line.strip() for line in f if line.strip() != \"\"]\n",
+        "\n",
+        "    # هر دو خط یک بیت هست\n",
+        "    couplets = [lines[i] + \"\\n\" + lines[i+1] for i in range(0, len(lines)-1, 2)]\n",
+        "\n",
+        "    # درهم‌ریختن ترتیب و انتخاب درصد خاصی\n",
+        "    random.shuffle(couplets)\n",
+        "    sample_size = int(len(couplets) * SPLIT_RATIO)\n",
+        "    selected = couplets[:sample_size]\n",
+        "\n",
+        "    # ذخیره‌سازی\n",
+        "    with open(output_path, \"w\", encoding=\"utf-8\") as f_out:\n",
+        "        for couplet in selected:\n",
+        "            f_out.write(couplet + \"\\n\")\n"
+      ],
+      "metadata": {
+        "id": "W3rMZlDeKIkl"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
